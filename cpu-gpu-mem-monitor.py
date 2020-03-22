@@ -125,23 +125,23 @@ class CpuGpuMemoryInfo(object):
             plt.savefig(self.save_location)
             print("save to %s" % self.save_location)
 
-    def take_sample_plots(self, src_list, n):
-        if len(src_list) <= n:
-            date_plot_list = [str(datetime.datetime.fromtimestamp(self.start_time.timestamp() + i)) for i in src_list]
-            return date_plot_list, src_list
-        else:
-            sample_step = len(src_list) / n
-            if (n <= 0):
-                print("n is: %d, invalid" % n)
-            sample_plot_list = [item for ind, item in enumerate(src_list) if ind % sample_step == 0]
-            date_plot_list = [self.start_time.timestamp() + i for i in sample_plot_list]
-            date_plot_list = [str(datetime.datetime.fromtimestamp(i)) for i in date_plot_list]
-            src_list = [i for ind, i in enumerate(src_list) if ind % sample_step == 0 ]
+    # def take_sample_plots(self, src_list, n):
+    #     if len(src_list) <= n:
+    #         date_plot_list = [str(datetime.datetime.fromtimestamp(self.start_time.timestamp() + i)) for i in src_list]
+    #         return date_plot_list, src_list
+    #     else:
+    #         sample_step = len(src_list) / n
+    #         if (n <= 0):
+    #             print("n is: %d, invalid" % n)
+    #         sample_plot_list = [item for ind, item in enumerate(src_list) if ind % sample_step == 0]
+    #         date_plot_list = [self.start_time.timestamp() + i for i in sample_plot_list]
+    #         date_plot_list = [str(datetime.datetime.fromtimestamp(i)) for i in date_plot_list]
+    #         src_list = [i for ind, i in enumerate(src_list) if ind % sample_step == 0 ]
 
-            if len(src_list) != len(date_plot_list):
-                print("error")
-                exit(-1)
-            return date_plot_list, src_list
+    #         if len(src_list) != len(date_plot_list):
+    #             print("error")
+    #             exit(-1)
+    #         return date_plot_list, src_list
 
 
 if __name__ == "__main__":
