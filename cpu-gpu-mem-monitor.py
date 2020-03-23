@@ -6,6 +6,7 @@ import psutil
 import pynvml
 import time
 import datetime
+import pandas as pd
 
 
 class CpuGpuMemoryInfo(object):
@@ -13,9 +14,13 @@ class CpuGpuMemoryInfo(object):
     def __init__(self, save_location):
         # 采样次数
         self.sample_nums = 0
+        
+        # data dict
+        self.data_dict = {}
 
         # 程序启动时间
         self.start_time = datetime.datetime.fromtimestamp(time.time())
+        self.time_plot_list = []
 
         # 保存位置
         self.save_location = save_location
@@ -42,8 +47,16 @@ class CpuGpuMemoryInfo(object):
         self.mem_subplot = self.fig.add_subplot(3,1,3)
 
     def monitor(self):
+        """
+        资源监控
+        """
         print("start monitor")
         while True:
+            # 时间散点+1
+            self.time_plot_list.append(self.sample_nums)
+            # 输出采样的次数， 定时保存图像
+            self.sample_nums += 1
+
             # 获取cpu信息
             cpu_used_rate_list = psutil.cpu_percent(interval=1, percpu=True)
             for ind, per_cpu_use_rate in enumerate(cpu_used_rate_list):
@@ -57,9 +70,8 @@ class CpuGpuMemoryInfo(object):
             self.cpu_subplot.grid()
             # 画出每个cpu的折线
             for ind, cpu in enumerate(self.cpu_list):
-                #x, y = self.take_sample_plots(cpu, 100)
-                self.cpu_subplot.plot(cpu, label='cpu-' + str(ind))
-                # self.cpu_subplot.plot(x, y, label='cpu-' + str(ind))
+                self.cpu_subplot.scatter(self.time_plot_list, cpu, label='cpu-' + str(ind))
+                self.data_dict["cpu-" + str(ind)] = [self.time_plot_list, cpu]
             # 坐标自动调整
             self.cpu_subplot.autoscale()
             self.cpu_subplot.set_ylim(0, 100)
@@ -81,6 +93,8 @@ class CpuGpuMemoryInfo(object):
              # 画出每个gpu的折线
             for ind, gpu in enumerate(self.gpu_list):
                 self.gpu_subplot.plot(gpu, label='gpu-' + str(ind))
+                self.data_dict['gpu-'+str(ind)] = [self.time_plot_list, gpu]
+
             # gpu坐标自动调整
             self.gpu_subplot.autoscale()
             self.gpu_subplot.set_ylim(0, self.total_gpu_mem_size)
@@ -97,22 +111,48 @@ class CpuGpuMemoryInfo(object):
             self.mem_subplot.set_ylabel("Memory(Mib)")
             self.mem_subplot.grid()
             self.mem_subplot.plot(self.mem_list, label='memory')
+            self.data_dict['mem'] = [self.time_plot_list, self.mem_list]
             self.mem_subplot.autoscale()
             self.mem_subplot.set_ylim(0, mem_info.total / 1024 / 1024)
             # 设置图例位置,loc可以为[upper, lower, left, right, center]
             self.mem_subplot.legend(loc='best', shadow=True)
 
-            # 输出采样的次数， 定时保存图像
-            self.sample_nums += 1
+            # 输出采样次数
             if (self.sample_nums % 10 == 0 and self.sample_nums != 0):
                 plt.savefig(self.save_location)
-                print("save success, sample count = %d" %  self.sample_nums)
+                print("save figure success, sample count = %d" %  self.sample_nums)
+                # 保存数据
+                self.save_data(self.data_dict)
 
             # 采样间隔
             plt.pause(0.5)
 
+    def take_sample_plots(self, x_list, y_list, n):
+        """
+        样本点采样
+        """
+        if (len(x_list) != len(y_list)):
+            print("x list length not equal to y list ")
+            exit(-1)
+        if (len(x_list) < n and len(y_list) < n):
+            return x_list, y_list
+
+        # 未完....
+
+        return x_list, y_list 
+
+    def save_data(self, dict):
+        """
+        将数据保存到文件, 方便后续画图分析
+        """
+        file_name = "cpu-gpu-mem-info.csv"
+        df = pd.DataFrame.from_dict(dict, orient='index').T.to_csv(file_name, index=False)
+        print("save data to file: %s success" % file_name)
 
     def run(self):
+        """
+        程序入口
+        """
         try:
             while True:
                 # 打开交互模式
@@ -124,24 +164,6 @@ class CpuGpuMemoryInfo(object):
         except KeyboardInterrupt:
             plt.savefig(self.save_location)
             print("save to %s" % self.save_location)
-
-    # def take_sample_plots(self, src_list, n):
-    #     if len(src_list) <= n:
-    #         date_plot_list = [str(datetime.datetime.fromtimestamp(self.start_time.timestamp() + i)) for i in src_list]
-    #         return date_plot_list, src_list
-    #     else:
-    #         sample_step = len(src_list) / n
-    #         if (n <= 0):
-    #             print("n is: %d, invalid" % n)
-    #         sample_plot_list = [item for ind, item in enumerate(src_list) if ind % sample_step == 0]
-    #         date_plot_list = [self.start_time.timestamp() + i for i in sample_plot_list]
-    #         date_plot_list = [str(datetime.datetime.fromtimestamp(i)) for i in date_plot_list]
-    #         src_list = [i for ind, i in enumerate(src_list) if ind % sample_step == 0 ]
-
-    #         if len(src_list) != len(date_plot_list):
-    #             print("error")
-    #             exit(-1)
-    #         return date_plot_list, src_list
 
 
 if __name__ == "__main__":
