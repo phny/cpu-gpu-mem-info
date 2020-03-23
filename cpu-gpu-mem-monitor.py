@@ -81,7 +81,7 @@ class CpuGpuMemoryInfo(object):
             self.cpu_subplot.autoscale()
             self.cpu_subplot.set_ylim(0, 100)
             # 设置图例位置,loc可以为[upper, lower, left, right, center]
-            self.cpu_subplot.legend(loc='best', shadow=True)
+            self.cpu_subplot.legend(loc='right', shadow=True)
 
             # 获取显存信息
             for gpu_ind in range(self.gpu_nums):
@@ -104,7 +104,7 @@ class CpuGpuMemoryInfo(object):
             self.gpu_subplot.autoscale()
             self.gpu_subplot.set_ylim(0, self.total_gpu_mem_size)
             # 设置图例位置,loc可以为[upper, lower, left, right, center]
-            self.gpu_subplot.legend(loc='best', shadow=True)
+            self.gpu_subplot.legend(loc='right', shadow=True)
 
             # 获取内存信息
             mem_info = psutil.virtual_memory()
@@ -120,7 +120,7 @@ class CpuGpuMemoryInfo(object):
             self.mem_subplot.autoscale()
             self.mem_subplot.set_ylim(0, mem_info.total / 1024 / 1024)
             # 设置图例位置,loc可以为[upper, lower, left, right, center]
-            self.mem_subplot.legend(loc='best', shadow=True)
+            self.mem_subplot.legend(loc='right', shadow=True)
 
             # 输出采样次数
             if (self.sample_nums % 10 == 0 and self.sample_nums != 0):
@@ -216,10 +216,10 @@ class CpuGpuMemoryInfo(object):
             self.cpu_subplot.plot(x_list_new, y_list_new, label='cpu-' + str(i))
         
         # 坐标自动调整
-        self.cpu_subplot.autoscale()
+        self.cpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
         self.cpu_subplot.set_ylim(0, 100)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
-        self.cpu_subplot.legend(loc='best', shadow=True)
+        self.cpu_subplot.legend(loc='right', shadow=True)
         print("finished draw cpu image")
 
     def draw_gpu_image(self):
@@ -248,17 +248,33 @@ class CpuGpuMemoryInfo(object):
 
             self.gpu_subplot.plot(x_list, y_list, label='gpu-' + str(i))
             # self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
-        # self.gpu_subplot.autoscale()
+        
         self.gpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
         self.gpu_subplot.set_ylim(0, 12288)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
-        self.gpu_subplot.legend(loc='best', shadow=True)
+        self.gpu_subplot.legend(loc='right', shadow=True)
 
     def draw_mem_image(self):
         """
         memory图像
         """
-        pass
+        # 清除原图像
+        self.mem_subplot.cla()
+        self.mem_subplot.set_title("Memory Info")
+        self.mem_subplot.set_xlabel("Time")
+        self.mem_subplot.set_ylabel("Memory(Mib)")
+        self.mem_subplot.grid()
+        data_dict = self.load_data()
+        x_list = ast.literal_eval(data_dict["mem"][0])
+        x_list = [item * self.interval for item in x_list]
+        y_list = ast.literal_eval(data_dict["mem"][1])
+
+        self.mem_subplot.plot(x_list, y_list, label='memory')
+        self.mem_subplot.set_xlim(0, x_list[len(x_list) - 1])
+        self.mem_subplot.set_ylim(0, 512 * 1024)
+        # 设置图例位置,loc可以为[upper, lower, left, right, center]
+        self.mem_subplot.legend(loc='right', shadow=True)
+
 
     def save_image(self):
         """
@@ -282,8 +298,13 @@ class CpuGpuMemoryInfo(object):
             plt.savefig(self.save_location)
             print("save to %s" % self.save_location)
 
+    def draw(self):
+        self.draw_cpu_image()
+        self.draw_gpu_image()
+        self.draw_mem_image()
+        self.save_image()
+
 
 if __name__ == "__main__":
     monitor = CpuGpuMemoryInfo("./out.png")
-    monitor.draw_gpu_image()
-    monitor.save_image()
+    monitor.draw()
