@@ -7,6 +7,7 @@ import pynvml
 import time
 import datetime
 import pandas as pd
+import ast
 
 
 class CpuGpuMemoryInfo(object):
@@ -131,13 +132,21 @@ class CpuGpuMemoryInfo(object):
         """
         样本点采样
         """
+        # 判断ｘ, y 坐标数据的长度是否相等
         if (len(x_list) != len(y_list)):
             print("x list length not equal to y list ")
             exit(-1)
         if (len(x_list) < n and len(y_list) < n):
             return x_list, y_list
 
-        # 未完....
+        # 采样步长
+        sample_step = len(x_list) / n
+
+        # 按照步长采样
+        x_list = [item for ind, item in enumerate(x_list) if ind % sample_step == 0 ]
+        y_list = [item for ind, item in enumerate(y_list) if ind % sample_step == 0 ]
+        print(x_list)
+        print(y_list)
 
         return x_list, y_list 
 
@@ -146,15 +155,51 @@ class CpuGpuMemoryInfo(object):
         将数据保存到文件, 方便后续画图分析
         """
         file_name = "cpu-gpu-mem-info.csv"
-        df = pd.DataFrame.from_dict(dict, orient='index').T.to_csv(file_name, index=False)
+        pd.DataFrame.from_dict(dict, orient='index').T.to_csv(file_name, index=False)
         print("save data to file: %s success" % file_name)
 
     def load_data(self):
-        file_name = "cpu-gpu-mem-info.csv"
+        """
+        从文件读取数据
+        """
+        file_name = "gcn.csv"
         file = pd.read_csv(file_name)
         df = pd.DataFrame(file)
         data_dict = df.to_dict()
         return data_dict
+    
+    def draw_cpu_image(self):
+        """
+        cpu图像
+        """
+        data_dict = self.load_data()
+        for i in range(8):
+            x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])
+            y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])
+            
+            x_list, y_list = self.take_sample_plots(x_list, y_list, 1000)
+            print(len(x_list))
+            print(len(y_list))
+            # self.cpu_subplot.plot(x_list, y_list)
+        print("finished draw cpu image")
+
+    def draw_gpu_image(self):
+        """
+        gpu图像
+        """
+        pass
+
+    def draw_mem_image(self):
+        """
+        memory图像
+        """
+        pass
+
+    def save_image(self):
+        """
+        保存图像
+        """
+        plt.savefig(self.save_location)
 
     def run(self):
         """
@@ -175,4 +220,5 @@ class CpuGpuMemoryInfo(object):
 
 if __name__ == "__main__":
     monitor = CpuGpuMemoryInfo("./out.png")
-    monitor.run()
+    monitor.draw_cpu_image()
+    monitor.save_image()
