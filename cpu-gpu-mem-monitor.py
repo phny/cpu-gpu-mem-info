@@ -175,4 +175,4 @@ class CpuGpuMemoryInfo(object):
 
 if __name__ == "__main__":
     monitor = CpuGpuMemoryInfo("./out.png")
-    monitor.load_data()
+    monitor.run()
