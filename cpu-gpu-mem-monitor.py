@@ -149,6 +149,13 @@ class CpuGpuMemoryInfo(object):
         df = pd.DataFrame.from_dict(dict, orient='index').T.to_csv(file_name, index=False)
         print("save data to file: %s success" % file_name)
 
+    def load_data(self):
+        file_name = "cpu-gpu-mem-info.csv"
+        file = pd.read_csv(file_name)
+        df = pd.DataFrame(file)
+        data_dict = df.to_dict()
+        return data_dict
+
     def run(self):
         """
         程序入口
@@ -168,4 +175,4 @@ class CpuGpuMemoryInfo(object):
 
 if __name__ == "__main__":
     monitor = CpuGpuMemoryInfo("./out.png")
-    monitor.run()
+    monitor.load_data()
