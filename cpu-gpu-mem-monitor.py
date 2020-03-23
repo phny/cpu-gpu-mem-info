@@ -8,6 +8,7 @@ import time
 import datetime
 import pandas as pd
 import ast
+import numpy as np
 
 
 class CpuGpuMemoryInfo(object):
@@ -15,6 +16,9 @@ class CpuGpuMemoryInfo(object):
     def __init__(self, save_location):
         # 采样次数
         self.sample_nums = 0
+
+        # 采样间隔, 默认设置为5秒
+        self.interval = 5
         
         # data dict
         self.data_dict = {}
@@ -126,7 +130,7 @@ class CpuGpuMemoryInfo(object):
                 self.save_data(self.data_dict)
 
             # 采样间隔
-            plt.pause(0.5)
+            plt.pause(self.interval)
 
     def take_sample_plots(self, x_list, y_list, n):
         """
@@ -150,6 +154,23 @@ class CpuGpuMemoryInfo(object):
 
         return x_list, y_list 
 
+    def data_fitting(self, x_list, y_list):
+        """
+        对数据进行拟合
+        """
+        y = np.array(y_list)
+        
+        # 用3次多项式拟合
+        f1 = np.polyfit(x_list, y, 3)
+        p1 = np.poly1d(f1)
+        # print(p1)
+        
+        # 也可使用yvals=np.polyval(f1, x)
+        yvals = p1(x_list)  #拟合y值
+
+        return x_list, yvals
+
+
     def save_data(self, dict):
         """
         将数据保存到文件, 方便后续画图分析
@@ -172,22 +193,65 @@ class CpuGpuMemoryInfo(object):
         """
         cpu图像
         """
+        # 清除原图像
+        self.cpu_subplot.cla()
+        #设置cpu坐标轴属性
+        self.cpu_subplot.set_title("CPU INFO")
+        self.cpu_subplot.set_xlabel("Time")
+        self.cpu_subplot.set_ylabel("Use Rate")
+        self.cpu_subplot.grid()
+
         data_dict = self.load_data()
         for i in range(8):
             x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])
+            x_list = [item * self.interval for item in x_list]
+
             y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])
-            
-            x_list, y_list = self.take_sample_plots(x_list, y_list, 1000)
-            print(len(x_list))
-            print(len(y_list))
-            # self.cpu_subplot.plot(x_list, y_list)
+            print("max cpu-" + str(i) + " = %d" % max(y_list))
+            print("min cpu-" + str(i) + " = %d" % min(y_list))
+            print("avg cpu-" + str(i) + " = %d" % np.mean(y_list))
+            x_list_new, y_list_new = self.data_fitting(x_list, y_list)
+
+           #  self.cpu_subplot.plot(x_list, y_list, 's', label='original values')
+            self.cpu_subplot.plot(x_list_new, y_list_new, label='cpu-' + str(i))
+        
+        # 坐标自动调整
+        self.cpu_subplot.autoscale()
+        self.cpu_subplot.set_ylim(0, 100)
+        # 设置图例位置,loc可以为[upper, lower, left, right, center]
+        self.cpu_subplot.legend(loc='best', shadow=True)
         print("finished draw cpu image")
 
     def draw_gpu_image(self):
         """
         gpu图像
         """
-        pass
+        #　清除原图像
+        self.gpu_subplot.cla()
+        # 设置坐标轴属性
+        self.gpu_subplot.set_title("GPU INFO")
+        self.gpu_subplot.set_xlabel("Time")
+        self.gpu_subplot.set_ylabel("Used(Mib)")
+        self.gpu_subplot.grid()
+
+        data_dict = self.load_data()
+
+        for i in range(8):
+            x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])
+            x_list = [item * self.interval for item in x_list]
+
+            y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])
+            print("max gpu-" + str(i) + " = %d" % max(y_list))
+            print("min gpu-" + str(i) + " = %d" % min(y_list))
+            print("avg gpu-" + str(i) + " = %d" % np.mean(y_list))
+            x_list_new, y_list_new = self.data_fitting(x_list, y_list)
+
+            self.gpu_subplot.plot(x_list, y_list, label='origin gpu-' + str(i))
+            self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
+        self.gpu_subplot.autoscale()
+        self.gpu_subplot.set_ylim(0, 12288)
+        # 设置图例位置,loc可以为[upper, lower, left, right, center]
+        self.gpu_subplot.legend(loc='best', shadow=True)
 
     def draw_mem_image(self):
         """
@@ -220,5 +284,5 @@ class CpuGpuMemoryInfo(object):
 
 if __name__ == "__main__":
     monitor = CpuGpuMemoryInfo("./out.png")
-    monitor.draw_cpu_image()
+    monitor.draw_gpu_image()
     monitor.save_image()
