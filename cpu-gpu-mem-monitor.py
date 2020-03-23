@@ -246,9 +246,10 @@ class CpuGpuMemoryInfo(object):
             print("avg gpu-" + str(i) + " = %d" % np.mean(y_list))
             x_list_new, y_list_new = self.data_fitting(x_list, y_list)
 
-            self.gpu_subplot.plot(x_list, y_list, label='origin gpu-' + str(i))
-            self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
-        self.gpu_subplot.autoscale()
+            self.gpu_subplot.plot(x_list, y_list, label='gpu-' + str(i))
+            # self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
+        # self.gpu_subplot.autoscale()
+        self.gpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
         self.gpu_subplot.set_ylim(0, 12288)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
         self.gpu_subplot.legend(loc='best', shadow=True)
