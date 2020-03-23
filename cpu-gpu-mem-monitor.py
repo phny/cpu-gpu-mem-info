@@ -269,6 +269,11 @@ class CpuGpuMemoryInfo(object):
         x_list = [item * self.interval for item in x_list]
         y_list = ast.literal_eval(data_dict["mem"][1])
 
+        print("min memory = %d" % min(y_list))
+        print("max memory = %d" % max(y_list))
+        print("avg memory = %d" % np.mean(y_list))
+
+
         self.mem_subplot.plot(x_list, y_list, label='memory')
         self.mem_subplot.set_xlim(0, x_list[len(x_list) - 1])
         self.mem_subplot.set_ylim(0, 512 * 1024)
