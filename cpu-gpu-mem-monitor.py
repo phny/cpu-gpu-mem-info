@@ -63,7 +63,7 @@ class CpuGpuMemoryInfo(object):
             self.sample_nums += 1
 
             # 获取cpu信息
-            cpu_used_rate_list = psutil.cpu_percent(interval=1, percpu=True)
+            cpu_used_rate_list = psutil.cpu_percent(interval=0.0, percpu=True)
             for cpu_ind, per_cpu_use_rate in enumerate(cpu_used_rate_list):
                 self.cpu_list[cpu_ind].append(per_cpu_use_rate)
             # 清除原图像
@@ -132,6 +132,7 @@ class CpuGpuMemoryInfo(object):
 
             # 采样间隔
             plt.pause(self.interval)
+            print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
 
     def take_sample_plots(self, x_list, y_list, n):
         """
@@ -227,9 +228,6 @@ class CpuGpuMemoryInfo(object):
 
            #  self.cpu_subplot.plot(x_list, y_list, 's', label='original values')
             self.cpu_subplot.plot(x_list_new, y_list_new, label='cpu-' + str(i))
-        print(cpu_mean)
-        print(cpu_count)
-        print(cpu_mean / cpu_count)
         print("total mean cpu = {}".format(cpu_mean / cpu_count))
         # 坐标自动调整
         self.cpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
@@ -274,6 +272,7 @@ class CpuGpuMemoryInfo(object):
         print("gpu-0 max = {}".format(max(gpu_0)))
         print("gpu-0 avg = {}".format(np.mean(gpu_0)))
         print("gpu-0 min = {}".format(min(gpu_0)))
+        print("finished draw gpu image")
 
 
         self.gpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
@@ -305,6 +304,7 @@ class CpuGpuMemoryInfo(object):
         self.mem_subplot.set_ylim(0, 512 * 1024)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
         self.mem_subplot.legend(loc='right', shadow=True)
+        print("finished draw memory image")
 
 
     def save_image(self):
@@ -337,9 +337,10 @@ class CpuGpuMemoryInfo(object):
 
 
 if __name__ == "__main__":
-    monitor = CpuGpuMemoryInfo("./dbscan.png")
+    monitor = CpuGpuMemoryInfo("./test.png")
     # monitor.run()
     monitor.draw()
-    # d = monitor.load_data()
-    
+    # data_dict = monitor.load_data()
+    # print(ast.literal_eval(data_dict["mem"][1]))
+    # print(len(ast.literal_eval(data_dict["mem"][1])))
     
