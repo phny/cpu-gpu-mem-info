@@ -64,8 +64,8 @@ class CpuGpuMemoryInfo(object):
 
             # 获取cpu信息
             cpu_used_rate_list = psutil.cpu_percent(interval=1, percpu=True)
-            for ind, per_cpu_use_rate in enumerate(cpu_used_rate_list):
-                self.cpu_list[ind].append(per_cpu_use_rate)
+            for cpu_ind, per_cpu_use_rate in enumerate(cpu_used_rate_list):
+                self.cpu_list[cpu_ind].append(per_cpu_use_rate)
             # 清除原图像
             self.cpu_subplot.cla()
             #设置cpu坐标轴属性
@@ -125,7 +125,8 @@ class CpuGpuMemoryInfo(object):
             # 输出采样次数
             if (self.sample_nums % 10 == 0 and self.sample_nums != 0):
                 plt.savefig(self.save_location)
-                print("save figure success, sample count = %d" %  self.sample_nums)
+                print("save figure success, sample count = {}, now time = {}".\
+                     format(self.sample_nums, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
                 # 保存数据
                 self.save_data(self.data_dict)
 
@@ -177,13 +178,14 @@ class CpuGpuMemoryInfo(object):
         """
         file_name = "cpu-gpu-mem-info.csv"
         pd.DataFrame.from_dict(dict, orient='index').T.to_csv(file_name, index=False)
-        print("save data to file: %s success" % file_name)
+        print("save data to file: {} success, now time = {}".format(file_name, 
+                            time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
     def load_data(self):
         """
         从文件读取数据
         """
-        file_name = "gcn.csv"
+        file_name = "dbscan.csv"
         file = pd.read_csv(file_name)
         df = pd.DataFrame(file)
         data_dict = df.to_dict()
@@ -200,26 +202,40 @@ class CpuGpuMemoryInfo(object):
         self.cpu_subplot.set_xlabel("Time")
         self.cpu_subplot.set_ylabel("Use Rate")
         self.cpu_subplot.grid()
-
+        
         data_dict = self.load_data()
-        for i in range(8):
+
+        # 从数据中获取cpu个数
+        cpu_count = 0
+        for i in data_dict.keys():
+            if (str(i).startswith("cpu")):
+                cpu_count += 1
+
+        cpu_mean = 0
+
+        for i in range(cpu_count):
             x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])
             x_list = [item * self.interval for item in x_list]
 
             y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])
-            print("max cpu-" + str(i) + " = %d" % max(y_list))
-            print("min cpu-" + str(i) + " = %d" % min(y_list))
-            print("avg cpu-" + str(i) + " = %d" % np.mean(y_list))
+            # print("max cpu-" + str(i) + " = %d" % max(y_list))
+            # print("min cpu-" + str(i) + " = %d" % min(y_list))
+            # print("avg cpu-" + str(i) + " = %d" % np.mean(y_list))
+            cpu_mean += np.mean(y_list)
+
             x_list_new, y_list_new = self.data_fitting(x_list, y_list)
 
            #  self.cpu_subplot.plot(x_list, y_list, 's', label='original values')
             self.cpu_subplot.plot(x_list_new, y_list_new, label='cpu-' + str(i))
-        
+        print(cpu_mean)
+        print(cpu_count)
+        print(cpu_mean / cpu_count)
+        print("total mean cpu = {}".format(cpu_mean / cpu_count))
         # 坐标自动调整
         self.cpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
         self.cpu_subplot.set_ylim(0, 100)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
-        self.cpu_subplot.legend(loc='right', shadow=True)
+        # self.cpu_subplot.legend(loc='right', shadow=True)
         print("finished draw cpu image")
 
     def draw_gpu_image(self):
@@ -236,19 +252,30 @@ class CpuGpuMemoryInfo(object):
 
         data_dict = self.load_data()
 
-        for i in range(8):
+        # 从数据中获取cpu个数
+        gpu_count = 0
+        for i in data_dict.keys():
+            if (str(i).startswith("gpu")):
+                gpu_count += 1
+
+        for i in range(gpu_count):
             x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])
             x_list = [item * self.interval for item in x_list]
 
             y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])
-            print("max gpu-" + str(i) + " = %d" % max(y_list))
-            print("min gpu-" + str(i) + " = %d" % min(y_list))
-            print("avg gpu-" + str(i) + " = %d" % np.mean(y_list))
+            # print("max gpu-" + str(i) + " = %d" % max(y_list))
+            # print("min gpu-" + str(i) + " = %d" % min(y_list))
+            # print("avg gpu-" + str(i) + " = %d" % np.mean(y_list))
             x_list_new, y_list_new = self.data_fitting(x_list, y_list)
 
             self.gpu_subplot.plot(x_list, y_list, label='gpu-' + str(i))
             # self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
-        
+        gpu_0 = ast.literal_eval(data_dict["gpu-0"][1])
+        print("gpu-0 max = {}".format(max(gpu_0)))
+        print("gpu-0 avg = {}".format(np.mean(gpu_0)))
+        print("gpu-0 min = {}".format(min(gpu_0)))
+
+
         self.gpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
         self.gpu_subplot.set_ylim(0, 12288)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
@@ -310,5 +337,9 @@ class CpuGpuMemoryInfo(object):
 
 
 if __name__ == "__main__":
-    monitor = CpuGpuMemoryInfo("./out.png")
+    monitor = CpuGpuMemoryInfo("./dbscan.png")
+    # monitor.run()
     monitor.draw()
+    # d = monitor.load_data()
+    
+    
