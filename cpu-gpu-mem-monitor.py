@@ -17,7 +17,7 @@ class CpuGpuMemoryInfo(object):
         self.sample_nums = 0
 
         # 采样间隔, 默认设置为5秒
-        self.interval = 5
+        self.interval = 7
 
         # data dict
         self.data_dict = {}
@@ -188,7 +188,7 @@ class CpuGpuMemoryInfo(object):
         """
         从文件读取数据
         """
-        file_name = "dbscan.csv"
+        file_name = "cpu-gpu-mem-info.csv"
         file = pd.read_csv(file_name)
         df = pd.DataFrame(file)
         data_dict = df.to_dict()
@@ -214,24 +214,31 @@ class CpuGpuMemoryInfo(object):
             if (str(i).startswith("cpu")):
                 cpu_count += 1
 
-        cpu_mean = 0
+        mean_cpu = 0
+        max_cpu = 0
+        min_cpu = 100
 
         for i in range(cpu_count):
-            x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])
+            x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])[:2000]
             x_list = [item * self.interval for item in x_list]
 
-            y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])
-            # print("max cpu-" + str(i) + " = %d" % max(y_list))
-            # print("min cpu-" + str(i) + " = %d" % min(y_list))
-            # print("avg cpu-" + str(i) + " = %d" % np.mean(y_list))
-            cpu_mean += np.mean(y_list)
+            y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])[:2000]
+
+            # min， max， mean
+            mean_cpu += np.mean(y_list)
+            if (max(y_list) > max_cpu):
+                max_cpu = max(y_list)
+            if (min(y_list) < min_cpu):
+                min_cpu = min(y_list)
 
             x_list_new, y_list_new = self.data_fitting(x_list, y_list)
 
            #  self.cpu_subplot.plot(x_list, y_list, 's', label='original values')
             self.cpu_subplot.plot(x_list_new, y_list_new,
                                   label='cpu-' + str(i))
-        print("total mean cpu = {}".format(cpu_mean / cpu_count))
+        print("min cpu = {}%".format(min_cpu))
+        print("max cpu = {}%".format(max_cpu))
+        print("total mean cpu = {}%".format(mean_cpu / cpu_count))
         # 坐标自动调整
         self.cpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
         self.cpu_subplot.set_ylim(0, 100)
@@ -259,26 +266,35 @@ class CpuGpuMemoryInfo(object):
             if (str(i).startswith("gpu")):
                 gpu_count += 1
 
+        # 记录最大最小平均的gpu
+        mean_gpu = 0
+        max_gpu = 0
+        min_gpu = 100000000
+
         for i in range(gpu_count):
-            x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])
+            x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])[:2000]
             x_list = [item * self.interval for item in x_list]
 
-            y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])
-            # print("max gpu-" + str(i) + " = %d" % max(y_list))
-            # print("min gpu-" + str(i) + " = %d" % min(y_list))
-            # print("avg gpu-" + str(i) + " = %d" % np.mean(y_list))
-            x_list_new, y_list_new = self.data_fitting(x_list, y_list)
+            y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])[:2000]
+            
+            # gpu数据拟合
+            # x_list_new, y_list_new = self.data_fitting(x_list, y_list)
+
+            mean_gpu += np.mean(y_list)
+            if (max(y_list) > max_gpu):
+                max_gpu = max(y_list)
+            if (min(y_list) < min_gpu):
+                min_gpu = min(y_list)
 
             self.gpu_subplot.plot(x_list, y_list, label='gpu-' + str(i))
             # self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
-        gpu_0 = ast.literal_eval(data_dict["gpu-0"][1])
-        print("gpu-0 max = {}".format(max(gpu_0)))
-        print("gpu-0 avg = {}".format(np.mean(gpu_0)))
-        print("gpu-0 min = {}".format(min(gpu_0)))
+        print("max gpu = {}".format(max_gpu))
+        print("avg gpu = {}".format(mean_gpu / 8))
+        print("min gpu = {}".format(min_gpu))
         print("finished draw gpu image")
 
         self.gpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
-        self.gpu_subplot.set_ylim(0, 12288)
+        self.gpu_subplot.set_ylim(0, 12288) # 247机器显存范围0 ～ 12G
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
         self.gpu_subplot.legend(loc='right', shadow=True)
 
@@ -293,9 +309,9 @@ class CpuGpuMemoryInfo(object):
         self.mem_subplot.set_ylabel("Memory(Mib)")
         self.mem_subplot.grid()
         data_dict = self.load_data()
-        x_list = ast.literal_eval(data_dict["mem"][0])
+        x_list = ast.literal_eval(data_dict["mem"][0])[:2000]
         x_list = [item * self.interval for item in x_list]
-        y_list = ast.literal_eval(data_dict["mem"][1])
+        y_list = ast.literal_eval(data_dict["mem"][1])[:2000]
 
         print("min memory = %d" % min(y_list))
         print("max memory = %d" % max(y_list))
@@ -303,7 +319,7 @@ class CpuGpuMemoryInfo(object):
 
         self.mem_subplot.plot(x_list, y_list, label='memory')
         self.mem_subplot.set_xlim(0, x_list[len(x_list) - 1])
-        self.mem_subplot.set_ylim(0, 512 * 1024)
+        self.mem_subplot.set_ylim(0, 512 * 1024) # 247机器运行内存9 ～ 512G
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
         self.mem_subplot.legend(loc='right', shadow=True)
         print("finished draw memory image")
@@ -338,9 +354,9 @@ class CpuGpuMemoryInfo(object):
 
 
 if __name__ == "__main__":
-    monitor = CpuGpuMemoryInfo("./merge-cluster.png")
-    monitor.run()
-    # monitor.draw()
+    monitor = CpuGpuMemoryInfo("./MergeCluster.png")
+    # monitor.run()
+    monitor.draw()
     # data_dict = monitor.load_data()
     # print(ast.literal_eval(data_dict["mem"][1]))
     # print(len(ast.literal_eval(data_dict["mem"][1])))
