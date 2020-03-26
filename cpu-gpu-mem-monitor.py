@@ -1,3 +1,4 @@
+import os
 import ast
 import pandas as pd
 import datetime
@@ -7,33 +8,40 @@ import psutil
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-matplotlib.use('Agg')
+import argparse
 
 
 class CpuGpuMemoryInfo(object):
-
-    def __init__(self, save_location):
+    def __init__(self, save_location, pid=None):
         # 采样次数
         self.sample_nums = 0
 
+        # 目标程序的pid
+        self.pid = pid
+
+        # 运行时间
+        self.duration = 0
+
         # 采样间隔, 默认设置为5秒
-        self.interval = 7
+        self.interval = 5
 
         # data dict
         self.data_dict = {}
 
-        # 程序启动时间
-        self.start_time = datetime.datetime.fromtimestamp(time.time())
+        # 程序启动时间戳
+        self.start_timestamp = int(time.time())
         self.time_plot_list = []
 
         # 保存位置
         self.save_location = save_location
+        if (not os.path.exists(os.path.dirname(self.save_location))):
+            os.makedirs(os.path.dirname(self.save_location))
 
         #cpu, gpu个数
         self.cpu_nums = psutil.cpu_count()
-        pynvml.nvmlInit()
 
         # 获取显卡的大小
+        pynvml.nvmlInit()
         self.gpu_nums = pynvml.nvmlDeviceGetCount()
         _handle = pynvml.nvmlDeviceGetHandleByIndex(0)
         _info = pynvml.nvmlDeviceGetMemoryInfo(_handle)
@@ -56,8 +64,9 @@ class CpuGpuMemoryInfo(object):
         """
         print("start monitor")
         while True:
-            # 时间散点+1
-            self.time_plot_list.append(self.sample_nums)
+            # 时间散点
+            now_time = int(time.time())
+            self.time_plot_list.append(now_time - self.start_timestamp)
             # 输出采样的次数， 定时保存图像
             self.sample_nums += 1
 
@@ -74,8 +83,8 @@ class CpuGpuMemoryInfo(object):
             self.cpu_subplot.grid()
             # 画出每个cpu的折线
             for ind, cpu in enumerate(self.cpu_list):
-                self.cpu_subplot.scatter(
-                    self.time_plot_list, cpu, label='cpu-' + str(ind))
+                # self.cpu_subplot.scatter(self.time_plot_list, cpu, label='cpu-' + str(ind))
+                self.cpu_subplot.plot(self.time_plot_list, cpu, label='cpu-' + str(ind))
                 self.data_dict["cpu-" + str(ind)] = [self.time_plot_list, cpu]
             # 坐标自动调整
             self.cpu_subplot.autoscale()
@@ -97,7 +106,7 @@ class CpuGpuMemoryInfo(object):
             self.gpu_subplot.grid()
             # 画出每个gpu的折线
             for ind, gpu in enumerate(self.gpu_list):
-                self.gpu_subplot.plot(gpu, label='gpu-' + str(ind))
+                self.gpu_subplot.plot(self.time_plot_list, gpu, label='gpu-' + str(ind))
                 self.data_dict['gpu-'+str(ind)] = [self.time_plot_list, gpu]
 
             # gpu坐标自动调整
@@ -115,7 +124,7 @@ class CpuGpuMemoryInfo(object):
             self.mem_subplot.set_xlabel("Time")
             self.mem_subplot.set_ylabel("Memory(Mib)")
             self.mem_subplot.grid()
-            self.mem_subplot.plot(self.mem_list, label='memory')
+            self.mem_subplot.plot(self.time_plot_list, self.mem_list, label='memory')
             self.data_dict['mem'] = [self.time_plot_list, self.mem_list]
             self.mem_subplot.autoscale()
             self.mem_subplot.set_ylim(0, mem_info.total / 1024 / 1024)
@@ -130,6 +139,14 @@ class CpuGpuMemoryInfo(object):
                 # 保存数据
                 self.save_data(self.data_dict)
 
+                # 检查目标进程是否已经退出
+                if (self.pid is not None):
+                    try:
+                        p = psutil.Process(self.pid)
+                    except Exception as e:
+                        print(e)
+                        exit(1)
+                
             # 采样间隔
             plt.pause(self.interval)
             print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
@@ -353,10 +370,19 @@ class CpuGpuMemoryInfo(object):
         self.save_image()
 
 
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s", "--save_location", metavar="result save location", type=str,
+                        required=True, dest="save_location", help="with file name: ./result.png", default="./result.png")
+    parser.add_argument("-p", "--pid", metavar="process pid", type=int, dest="pid", help="目前程序的PID")
+    
+    args = parser.parse_args()
+
+    monitor = CpuGpuMemoryInfo(args.save_location, args.pid)
+    monitor.run()
+    # monitor.draw()
+
+
 if __name__ == "__main__":
-    monitor = CpuGpuMemoryInfo("./MergeCluster.png")
-    # monitor.run()
-    monitor.draw()
-    # data_dict = monitor.load_data()
-    # print(ast.literal_eval(data_dict["mem"][1]))
-    # print(len(ast.literal_eval(data_dict["mem"][1])))
+    main()
+    

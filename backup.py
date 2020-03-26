@@ -135,7 +135,7 @@ def mem_info_show_mode(processName, location, save_flag, mem_list, gpu_list):
 
 def mem_info_agg_mode(processName, location, save_flag, mem_list, gpu_list):
     import matplotlib
-    matplotlib.use('Agg')
+    # matplotlib.use('Agg')
     import matplotlib.pyplot as plt
 
     # check the process name
