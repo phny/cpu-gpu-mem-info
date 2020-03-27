@@ -384,5 +384,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # monitor = CpuGpuMemoryInfo(args.save_location, args.pid)
+    # monitor.draw()
     main()
     

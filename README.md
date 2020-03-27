@@ -2,5 +2,5 @@
 
 ## 运行
 ```shell
-python3.6 cpu-gpu-mem-monitor.py
+python3.6 cpu-gpu-mem-monitor.py --save_location=./out/result.png --pid=1234
 ```
