@@ -6,13 +6,18 @@ import time
 import pynvml
 import psutil
 import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 import argparse
+import json
 
 
 class CpuGpuMemoryInfo(object):
-    def __init__(self, save_location, pid=None):
+    def __init__(self, save_dir, pid=None, mode="auto"):
+        # 启动模式(暂时未使用)
+        self.mode = mode
+
         # 采样次数
         self.sample_nums = 0
 
@@ -23,9 +28,9 @@ class CpuGpuMemoryInfo(object):
         self.duration = 0
 
         # 采样间隔, 默认设置为5秒
-        self.interval = 5
+        self.interval = 3
 
-        # data dict
+        # data dict, 记录cpu,gpu,memory数据
         self.data_dict = {}
 
         # 程序启动时间戳
@@ -33,19 +38,24 @@ class CpuGpuMemoryInfo(object):
         self.time_plot_list = []
 
         # 保存位置
-        self.save_location = save_location
-        if (not os.path.exists(os.path.dirname(self.save_location))):
-            os.makedirs(os.path.dirname(self.save_location))
+        self.save_dir = save_dir
+        if (not os.path.exists(self.save_dir)):
+            os.makedirs(self.save_dir)
 
-        #cpu, gpu个数
+        #cpu个数
         self.cpu_nums = psutil.cpu_count()
-
-        # 获取显卡的大小
+       
         pynvml.nvmlInit()
+        # 获取gpu个数
         self.gpu_nums = pynvml.nvmlDeviceGetCount()
         _handle = pynvml.nvmlDeviceGetHandleByIndex(0)
         _info = pynvml.nvmlDeviceGetMemoryInfo(_handle)
+         # 获取显卡的大小
         self.total_gpu_mem_size = _info.total / 1024 / 1024
+
+        # 获取内存大小
+        _mem_handle = psutil.virtual_memory()
+        self.total_mem_size = _mem_handle.total / 1024 / 1024
 
         # gpu, cpu list
         self.cpu_list = [[] for i in range(self.cpu_nums)]
@@ -58,7 +68,7 @@ class CpuGpuMemoryInfo(object):
         self.gpu_subplot = self.fig.add_subplot(3, 1, 2)
         self.mem_subplot = self.fig.add_subplot(3, 1, 3)
 
-    def monitor(self):
+    def monitor(self, args):
         """
         资源监控
         """
@@ -83,12 +93,12 @@ class CpuGpuMemoryInfo(object):
             self.cpu_subplot.grid()
             # 画出每个cpu的折线
             for ind, cpu in enumerate(self.cpu_list):
-                # self.cpu_subplot.scatter(self.time_plot_list, cpu, label='cpu-' + str(ind))
+                # 画出原始cpu折线图
                 self.cpu_subplot.plot(self.time_plot_list, cpu, label='cpu-' + str(ind))
                 self.data_dict["cpu-" + str(ind)] = [self.time_plot_list, cpu]
             # 坐标自动调整
             self.cpu_subplot.autoscale()
-            self.cpu_subplot.set_ylim(0, 100)
+            self.cpu_subplot.set_ylim(0, 110)
             # 设置图例位置,loc可以为[upper, lower, left, right, center]
             self.cpu_subplot.legend(loc='right', shadow=True)
 
@@ -132,48 +142,34 @@ class CpuGpuMemoryInfo(object):
             self.mem_subplot.legend(loc='right', shadow=True)
 
             # 输出采样次数
-            if (self.sample_nums % 10 == 0 and self.sample_nums != 0):
-                plt.savefig(self.save_location)
-                print("save figure success, sample count = {}, now time = {}".
-                      format(self.sample_nums, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-                # 保存数据
+            if (self.sample_nums % 5 == 0 and self.sample_nums != 0):
+                # 保存图像
+                # plt.savefig(os.path.join(self.save_dir, "monitor-result.png"), bbox_inches = 'tight')
+                # print("save figure success, sample count = {}, now time = {}".
+                #       format(self.sample_nums, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+                
+                # 保存数据: ./monitor-result.csv
                 self.save_data(self.data_dict)
 
                 # 检查目标进程是否已经退出
-                if (self.pid is not None):
-                    try:
-                        p = psutil.Process(self.pid)
-                    except Exception as e:
-                        print(e)
-                        exit(1)
-                
-            # 采样间隔
+                try:
+                    psutil.Process(self.pid)
+                except Exception as e:
+                    # 进程退出, 画图保存， 并结束监控
+                    self.draw('./monitor-result.csv', fitting=True)
+                    self.draw('./monitor-result.csv', fitting=False)
+                    print("pid = {} not found, finished monitor now， total run time: {} s". \
+                            format(self.pid, time.time() - self.start_timestamp))
+                    print("finished monitor")
+                    exit(1)
+                finally:
+                    # 进程未退出，画图保存, 继续监控
+                    self.draw('./monitor-result.csv', fitting=True)
+                    self.draw('./monitor-result.csv', fitting=False)
+
+            # 暂停 interval 秒
             plt.pause(self.interval)
-            print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
-
-    def take_sample_plots(self, x_list, y_list, n):
-        """
-        样本点采样
-        """
-        # 判断ｘ, y 坐标数据的长度是否相等
-        if (len(x_list) != len(y_list)):
-            print("x list length not equal to y list ")
-            exit(-1)
-        if (len(x_list) < n and len(y_list) < n):
-            return x_list, y_list
-
-        # 采样步长
-        sample_step = len(x_list) / n
-
-        # 按照步长采样
-        x_list = [item for ind, item in enumerate(
-            x_list) if ind % sample_step == 0]
-        y_list = [item for ind, item in enumerate(
-            y_list) if ind % sample_step == 0]
-        print(x_list)
-        print(y_list)
-
-        return x_list, y_list
+            print("sample nums: {}, now time: {}".format(self.sample_nums, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
     def data_fitting(self, x_list, y_list):
         """
@@ -195,23 +191,22 @@ class CpuGpuMemoryInfo(object):
         """
         将数据保存到文件, 方便后续画图分析
         """
-        file_name = "cpu-gpu-mem-info.csv"
+        file_name = "monitor-result.csv"
         pd.DataFrame.from_dict(dict, orient='index').T.to_csv(
             file_name, index=False)
         print("save data to file: {} success, now time = {}".format(file_name,
                                                                     time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
-    def load_data(self):
+    def load_data(self, data_path):
         """
         从文件读取数据
         """
-        file_name = "cpu-gpu-mem-info.csv"
-        file = pd.read_csv(file_name)
+        file = pd.read_csv(data_path)
         df = pd.DataFrame(file)
         data_dict = df.to_dict()
         return data_dict
 
-    def draw_cpu_image(self):
+    def draw_cpu_image(self, data_path, fitting):
         """
         cpu图像
         """
@@ -223,7 +218,7 @@ class CpuGpuMemoryInfo(object):
         self.cpu_subplot.set_ylabel("Use Rate")
         self.cpu_subplot.grid()
 
-        data_dict = self.load_data()
+        data_dict = self.load_data(data_path)
 
         # 从数据中获取cpu个数
         cpu_count = 0
@@ -236,10 +231,10 @@ class CpuGpuMemoryInfo(object):
         min_cpu = 100
 
         for i in range(cpu_count):
-            x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])[:2000]
-            x_list = [item * self.interval for item in x_list]
+            x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])
+            # x_list = [item * self.interval for item in x_list]
 
-            y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])[:2000]
+            y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])
 
             # min， max， mean
             mean_cpu += np.mean(y_list)
@@ -247,10 +242,15 @@ class CpuGpuMemoryInfo(object):
                 max_cpu = max(y_list)
             if (min(y_list) < min_cpu):
                 min_cpu = min(y_list)
+            if fitting:
+                # 对cpu的数据进行3次多项式拟合，去掉其中不合理的峰值
+                x_list_new, y_list_new = self.data_fitting(x_list, y_list)
+            else:
+                # 不拟合
+                x_list_new = x_list
+                y_list_new = y_list
 
-            x_list_new, y_list_new = self.data_fitting(x_list, y_list)
-
-           #  self.cpu_subplot.plot(x_list, y_list, 's', label='original values')
+            # self.cpu_subplot.plot(x_list, y_list, 's', label='original values')
             self.cpu_subplot.plot(x_list_new, y_list_new,
                                   label='cpu-' + str(i))
         print("min cpu = {}%".format(min_cpu))
@@ -258,12 +258,13 @@ class CpuGpuMemoryInfo(object):
         print("total mean cpu = {}%".format(mean_cpu / cpu_count))
         # 坐标自动调整
         self.cpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
-        self.cpu_subplot.set_ylim(0, 100)
+        # 设置成110，当cpu 100%的时候显示好看点
+        self.cpu_subplot.set_ylim(0, 110)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
-        # self.cpu_subplot.legend(loc='right', shadow=True)
+        # self.cpu_subplot.legend(loc='right', shadow=True) # 去掉， 因为当cpu为64个的时候， 长度超过图表限制了
         print("finished draw cpu image")
 
-    def draw_gpu_image(self):
+    def draw_gpu_image(self, data_path, fitting):
         """
         gpu图像
         """
@@ -275,7 +276,7 @@ class CpuGpuMemoryInfo(object):
         self.gpu_subplot.set_ylabel("Used(Mib)")
         self.gpu_subplot.grid()
 
-        data_dict = self.load_data()
+        data_dict = self.load_data(data_path)
 
         # 从数据中获取cpu个数
         gpu_count = 0
@@ -289,33 +290,35 @@ class CpuGpuMemoryInfo(object):
         min_gpu = 100000000
 
         for i in range(gpu_count):
-            x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])[:2000]
-            x_list = [item * self.interval for item in x_list]
-
-            y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])[:2000]
+            x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])
+            y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])
             
             # gpu数据拟合
             # x_list_new, y_list_new = self.data_fitting(x_list, y_list)
-
+            # 记录gpu的最大最小以及平均值
             mean_gpu += np.mean(y_list)
             if (max(y_list) > max_gpu):
                 max_gpu = max(y_list)
             if (min(y_list) < min_gpu):
                 min_gpu = min(y_list)
-
+            # 画gpu图像
             self.gpu_subplot.plot(x_list, y_list, label='gpu-' + str(i))
             # self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
         print("max gpu = {}".format(max_gpu))
-        print("avg gpu = {}".format(mean_gpu / 8))
+        print("avg gpu = {}".format(mean_gpu / gpu_count))
         print("min gpu = {}".format(min_gpu))
         print("finished draw gpu image")
-
+        # 设置gpu坐标轴范围
         self.gpu_subplot.set_xlim(0, x_list[len(x_list) - 1])
-        self.gpu_subplot.set_ylim(0, 12288) # 247机器显存范围0 ～ 12G
+        if (self.mode == "manual"):
+            f = open("./config.json", "r")
+            d = json.load(f)
+            self.total_gpu_mem_size = d["gpu"]["max_gpu_size"]
+        self.gpu_subplot.set_ylim(0, self.total_gpu_mem_size)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
         self.gpu_subplot.legend(loc='right', shadow=True)
 
-    def draw_mem_image(self):
+    def draw_mem_image(self, data_path, fitting):
         """
         memory图像
         """
@@ -325,10 +328,10 @@ class CpuGpuMemoryInfo(object):
         self.mem_subplot.set_xlabel("Time")
         self.mem_subplot.set_ylabel("Memory(Mib)")
         self.mem_subplot.grid()
-        data_dict = self.load_data()
-        x_list = ast.literal_eval(data_dict["mem"][0])[:2000]
-        x_list = [item * self.interval for item in x_list]
-        y_list = ast.literal_eval(data_dict["mem"][1])[:2000]
+        data_dict = self.load_data(data_path)
+        x_list = ast.literal_eval(data_dict["mem"][0])
+        # x_list = [item * self.interval for item in x_list]
+        y_list = ast.literal_eval(data_dict["mem"][1])
 
         print("min memory = %d" % min(y_list))
         print("max memory = %d" % max(y_list))
@@ -336,18 +339,26 @@ class CpuGpuMemoryInfo(object):
 
         self.mem_subplot.plot(x_list, y_list, label='memory')
         self.mem_subplot.set_xlim(0, x_list[len(x_list) - 1])
-        self.mem_subplot.set_ylim(0, 512 * 1024) # 247机器运行内存9 ～ 512G
+        if (self.mode == "manual"):
+            # 从配置文件获取total_mem_size
+            f = open("./config.json", "r")
+            d = json.load(f)
+            self.total_mem_size = d["memory"]["max_mem_size"]
+        self.mem_subplot.set_ylim(0, self.total_mem_size)
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
         self.mem_subplot.legend(loc='right', shadow=True)
         print("finished draw memory image")
 
-    def save_image(self):
+    def save_image(self, fitting):
         """
         保存图像
         """
-        plt.savefig(self.save_location)
+        if fitting:
+            plt.savefig(os.path.join(self.save_dir, "monitor-result-fitting.png"), bbox_inches = 'tight')
+        else:
+            plt.savefig(os.path.join(self.save_dir, "monitor-result.png"), bbox_inches = 'tight')
 
-    def run(self):
+    def run(self, args):
         """
         程序入口
         """
@@ -356,35 +367,39 @@ class CpuGpuMemoryInfo(object):
                 # 打开交互模式
                 plt.ion()
                 # 进行画图
-                self.monitor()
+                self.monitor(args)
                 # 关闭交互模式
                 plt.ioff()
         except KeyboardInterrupt:
-            plt.savefig(self.save_location)
-            print("save to %s" % self.save_location)
+            plt.savefig(os.path.join(self.save_dir, "monitor-result-fitting.png"), bbox_inches = 'tight')
+            print("save to %s" % self.save_dir)
+            print("total run time: {} s".format(time.time() - self.start_timestamp))
 
-    def draw(self):
-        self.draw_cpu_image()
-        self.draw_gpu_image()
-        self.draw_mem_image()
-        self.save_image()
+    def draw(self, data_path, fitting=False):
+        """画出cpu，gpu，memory的图像并保存
+        """
+        self.draw_cpu_image(data_path, fitting)
+        self.draw_gpu_image(data_path, fitting)
+        self.draw_mem_image(data_path, fitting)
+        self.save_image(fitting)
 
 
 def main():
+    """
+    根据提供的进程pid开启监控系统的cpu,gpu,memory， 进程结束则程序画图保存退出
+    """
     parser = argparse.ArgumentParser()
-    parser.add_argument("-s", "--save_location", metavar="result save location", type=str,
-                        required=True, dest="save_location", help="with file name: ./result.png", default="./result.png")
-    parser.add_argument("-p", "--pid", metavar="process pid", type=int, dest="pid", help="目前程序的PID")
+    parser.add_argument("-s", "--save_dir", metavar="monitor result save dir", type=str,
+                        required=False, dest="save_dir", help="with dir name: ./monitor-result", default="./monitor-result")
+    parser.add_argument("-p", "--pid", metavar="process pid", type=int, dest="pid", help="目前程序的PID，可以不提供", 
+                        required=False, default=1)
     
     args = parser.parse_args()
 
-    monitor = CpuGpuMemoryInfo(args.save_location, args.pid)
-    monitor.run()
-    # monitor.draw()
+    monitor = CpuGpuMemoryInfo(args.save_dir, args.pid)
+    monitor.run(args)
 
 
 if __name__ == "__main__":
-    # monitor = CpuGpuMemoryInfo(args.save_location, args.pid)
-    # monitor.draw()
+    # python3.6 cpu-gpu-mem-monitor.py --save_dir=./out --pid=target_pid
     main()
-    

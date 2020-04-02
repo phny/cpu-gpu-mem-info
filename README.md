@@ -2,5 +2,7 @@
 
 ## 运行
 ```shell
+# 自动监控模式：
 python3.6 cpu-gpu-mem-monitor.py --save_location=./out/result.png --pid=1234
+
 ```
