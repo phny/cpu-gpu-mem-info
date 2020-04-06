@@ -149,7 +149,7 @@ class CpuGpuMemoryInfo(object):
                 #       format(self.sample_nums, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
                 
                 # 保存数据: ./monitor-result.csv
-                self.save_data(self.data_dict)
+                self.save_data(self.data_dict, self.save_dir)
 
                 # 检查目标进程是否已经退出
                 try:
@@ -187,13 +187,13 @@ class CpuGpuMemoryInfo(object):
 
         return x_list, yvals
 
-    def save_data(self, dict):
+    def save_data(self, dict, save_dir):
         """
         将数据保存到文件, 方便后续画图分析
         """
         file_name = "monitor-result.csv"
         pd.DataFrame.from_dict(dict, orient='index').T.to_csv(
-            file_name, index=False)
+            os.path.join(save_dir, file_name), index=False)
         print("save data to file: {} success, now time = {}".format(file_name,
                                                                     time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
