@@ -1,3 +1,6 @@
+import json
+import argparse
+import matplotlib.pyplot as plt
 import os
 import ast
 import pandas as pd
@@ -8,9 +11,6 @@ import psutil
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-import argparse
-import json
 
 
 class CpuGpuMemoryInfo(object):
@@ -42,15 +42,15 @@ class CpuGpuMemoryInfo(object):
         if (not os.path.exists(self.save_dir)):
             os.makedirs(self.save_dir)
 
-        #cpu个数
+        # cpu个数
         self.cpu_nums = psutil.cpu_count()
-       
+
         pynvml.nvmlInit()
         # 获取gpu个数
         self.gpu_nums = pynvml.nvmlDeviceGetCount()
         _handle = pynvml.nvmlDeviceGetHandleByIndex(0)
         _info = pynvml.nvmlDeviceGetMemoryInfo(_handle)
-         # 获取显卡的大小
+        # 获取显卡的大小
         self.total_gpu_mem_size = _info.total / 1024 / 1024
 
         # 获取内存大小
@@ -72,7 +72,7 @@ class CpuGpuMemoryInfo(object):
         """
         资源监控
         """
-        print("start monitor")
+        print("***start monitor***")
         while True:
             # 时间散点
             now_time = int(time.time())
@@ -94,7 +94,8 @@ class CpuGpuMemoryInfo(object):
             # 画出每个cpu的折线
             for ind, cpu in enumerate(self.cpu_list):
                 # 画出原始cpu折线图
-                self.cpu_subplot.plot(self.time_plot_list, cpu, label='cpu-' + str(ind))
+                self.cpu_subplot.plot(
+                    self.time_plot_list, cpu, label='cpu-' + str(ind))
                 self.data_dict["cpu-" + str(ind)] = [self.time_plot_list, cpu]
             # 坐标自动调整
             self.cpu_subplot.autoscale()
@@ -116,7 +117,8 @@ class CpuGpuMemoryInfo(object):
             self.gpu_subplot.grid()
             # 画出每个gpu的折线
             for ind, gpu in enumerate(self.gpu_list):
-                self.gpu_subplot.plot(self.time_plot_list, gpu, label='gpu-' + str(ind))
+                self.gpu_subplot.plot(
+                    self.time_plot_list, gpu, label='gpu-' + str(ind))
                 self.data_dict['gpu-'+str(ind)] = [self.time_plot_list, gpu]
 
             # gpu坐标自动调整
@@ -134,7 +136,8 @@ class CpuGpuMemoryInfo(object):
             self.mem_subplot.set_xlabel("Time")
             self.mem_subplot.set_ylabel("Memory(Mib)")
             self.mem_subplot.grid()
-            self.mem_subplot.plot(self.time_plot_list, self.mem_list, label='memory')
+            self.mem_subplot.plot(self.time_plot_list,
+                                  self.mem_list, label='memory')
             self.data_dict['mem'] = [self.time_plot_list, self.mem_list]
             self.mem_subplot.autoscale()
             self.mem_subplot.set_ylim(0, mem_info.total / 1024 / 1024)
@@ -147,29 +150,33 @@ class CpuGpuMemoryInfo(object):
                 # plt.savefig(os.path.join(self.save_dir, "monitor-result.png"), bbox_inches = 'tight')
                 # print("save figure success, sample count = {}, now time = {}".
                 #       format(self.sample_nums, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
-                
-                # 保存数据: ./monitor-result.csv
+
+                # 保存数据: self.save_dir + monitor-result.csv
                 self.save_data(self.data_dict, self.save_dir)
 
                 # 检查目标进程是否已经退出
                 try:
                     psutil.Process(self.pid)
-                except Exception as e:
+                except Exception:
                     # 进程退出, 画图保存， 并结束监控
-                    self.draw('./monitor-result.csv', fitting=True)
-                    self.draw('./monitor-result.csv', fitting=False)
-                    print("pid = {} not found, finished monitor now， total run time: {} s". \
-                            format(self.pid, time.time() - self.start_timestamp))
-                    print("finished monitor")
+                    self.draw(os.path.join(self.save_dir,
+                                           'monitor-result.csv'), fitting=True)
+                    self.draw(os.path.join(self.save_dir,
+                                           'monitor-result.csv'), fitting=False)
+                    print("PID = {} not found, finished monitor now， total run time: {} s".
+                          format(self.pid, time.time() - self.start_timestamp))
+                    print("***finished monitor***")
                     exit(1)
-                finally:
-                    # 进程未退出，画图保存, 继续监控
-                    self.draw('./monitor-result.csv', fitting=True)
-                    self.draw('./monitor-result.csv', fitting=False)
+                # 进程未退出，画图保存, 继续监控
+                self.draw(os.path.join(self.save_dir,
+                                       'monitor-result.csv'), fitting=True)
+                self.draw(os.path.join(self.save_dir,
+                                       'monitor-result.csv'), fitting=False)
 
             # 暂停 interval 秒
             plt.pause(self.interval)
-            print("sample nums: {}, now time: {}".format(self.sample_nums, time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+            print("sample nums: {}, now time: {}".format(self.sample_nums,
+                                                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
     def data_fitting(self, x_list, y_list):
         """
@@ -292,7 +299,7 @@ class CpuGpuMemoryInfo(object):
         for i in range(gpu_count):
             x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])
             y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])
-            
+
             # gpu数据拟合
             # x_list_new, y_list_new = self.data_fitting(x_list, y_list)
             # 记录gpu的最大最小以及平均值
@@ -354,9 +361,11 @@ class CpuGpuMemoryInfo(object):
         保存图像
         """
         if fitting:
-            plt.savefig(os.path.join(self.save_dir, "monitor-result-fitting.png"), bbox_inches = 'tight')
+            plt.savefig(os.path.join(self.save_dir,
+                                     "monitor-result-fitting.png"), bbox_inches='tight')
         else:
-            plt.savefig(os.path.join(self.save_dir, "monitor-result.png"), bbox_inches = 'tight')
+            plt.savefig(os.path.join(self.save_dir,
+                                     "monitor-result.png"), bbox_inches='tight')
 
     def run(self, args):
         """
@@ -371,9 +380,11 @@ class CpuGpuMemoryInfo(object):
                 # 关闭交互模式
                 plt.ioff()
         except KeyboardInterrupt:
-            plt.savefig(os.path.join(self.save_dir, "monitor-result-fitting.png"), bbox_inches = 'tight')
+            plt.savefig(os.path.join(self.save_dir,
+                                     "monitor-result-fitting.png"), bbox_inches='tight')
             print("save to %s" % self.save_dir)
-            print("total run time: {} s".format(time.time() - self.start_timestamp))
+            print("total run time: {} s".format(
+                time.time() - self.start_timestamp))
 
     def draw(self, data_path, fitting=False):
         """画出cpu，gpu，memory的图像并保存
@@ -391,9 +402,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-s", "--save_dir", metavar="monitor result save dir", type=str,
                         required=False, dest="save_dir", help="with dir name: ./monitor-result", default="./monitor-result")
-    parser.add_argument("-p", "--pid", metavar="process pid", type=int, dest="pid", help="目前程序的PID，可以不提供", 
+    parser.add_argument("-p", "--pid", metavar="process pid", type=int, dest="pid", help="目前程序的PID，可以不提供",
                         required=False, default=1)
-    
+
     args = parser.parse_args()
 
     monitor = CpuGpuMemoryInfo(args.save_dir, args.pid)
