@@ -1,0 +1,258 @@
+2020-04-15 22:23:54,802 cpu_gpu_mem_monitor.py[line:84] INFO ***start monitor***
+2020-04-15 22:23:59,126 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 1, now time: 2020-04-15 22:23:59
+2020-04-15 22:24:03,409 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 2, now time: 2020-04-15 22:24:03
+2020-04-15 22:24:07,696 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 3, now time: 2020-04-15 22:24:07
+2020-04-15 22:24:12,006 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 4, now time: 2020-04-15 22:24:12
+2020-04-15 22:24:13,115 cpu_gpu_mem_monitor.py[line:214] INFO save data to file: monitor-result.csv success, now time = 2020-04-15 22:24:13
+2020-04-15 22:24:13,184 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:24:13,185 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 34.7%
+2020-04-15 22:24:13,185 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 6.969999999999999%
+2020-04-15 22:24:13,185 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:24:13,216 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.0
+2020-04-15 22:24:13,216 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 429.65
+2020-04-15 22:24:13,216 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 426.0625
+2020-04-15 22:24:13,216 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:24:13,252 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2728
+2020-04-15 22:24:13,252 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2862
+2020-04-15 22:24:13,252 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2782
+2020-04-15 22:24:13,255 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:24:13,793 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:24:13,793 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 34.7%
+2020-04-15 22:24:13,793 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 6.969999999999999%
+2020-04-15 22:24:13,794 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:24:13,824 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.0
+2020-04-15 22:24:13,824 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 429.65
+2020-04-15 22:24:13,824 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 426.0625
+2020-04-15 22:24:13,824 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:24:13,853 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2728
+2020-04-15 22:24:13,853 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2862
+2020-04-15 22:24:13,854 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2782
+2020-04-15 22:24:13,856 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:24:17,450 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 5, now time: 2020-04-15 22:24:17
+2020-04-15 22:24:21,743 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 6, now time: 2020-04-15 22:24:21
+2020-04-15 22:24:26,047 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 7, now time: 2020-04-15 22:24:26
+2020-04-15 22:24:30,344 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 8, now time: 2020-04-15 22:24:30
+2020-04-15 22:24:34,652 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 9, now time: 2020-04-15 22:24:34
+2020-04-15 22:24:45,290 cpu_gpu_mem_monitor.py[line:84] INFO ***start monitor***
+2020-04-15 22:24:49,603 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 1, now time: 2020-04-15 22:24:49
+2020-04-15 22:24:53,912 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 2, now time: 2020-04-15 22:24:53
+2020-04-15 22:24:58,238 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 3, now time: 2020-04-15 22:24:58
+2020-04-15 22:25:02,555 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 4, now time: 2020-04-15 22:25:02
+2020-04-15 22:25:03,691 cpu_gpu_mem_monitor.py[line:214] INFO save data to file: monitor-result.csv success, now time = 2020-04-15 22:25:03
+2020-04-15 22:25:03,773 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:25:03,773 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 44.4%
+2020-04-15 22:25:03,773 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 6.3374999999999995%
+2020-04-15 22:25:03,773 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:25:03,802 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 433.625
+2020-04-15 22:25:03,802 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 433.625
+2020-04-15 22:25:03,802 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 433.625
+2020-04-15 22:25:03,802 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:25:03,834 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:25:03,834 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2764
+2020-04-15 22:25:03,834 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2758
+2020-04-15 22:25:03,837 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:25:04,386 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:25:04,386 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 44.4%
+2020-04-15 22:25:04,386 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 6.3374999999999995%
+2020-04-15 22:25:04,387 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:25:04,411 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 433.625
+2020-04-15 22:25:04,411 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 433.625
+2020-04-15 22:25:04,412 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 433.625
+2020-04-15 22:25:04,412 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:25:04,439 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:25:04,439 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2764
+2020-04-15 22:25:04,439 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2758
+2020-04-15 22:25:04,441 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:25:08,010 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 5, now time: 2020-04-15 22:25:08
+2020-04-15 22:25:12,329 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 6, now time: 2020-04-15 22:25:12
+2020-04-15 22:25:16,643 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 7, now time: 2020-04-15 22:25:16
+2020-04-15 22:25:20,996 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 8, now time: 2020-04-15 22:25:20
+2020-04-15 22:25:25,317 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 9, now time: 2020-04-15 22:25:25
+2020-04-15 22:25:26,440 cpu_gpu_mem_monitor.py[line:214] INFO save data to file: monitor-result.csv success, now time = 2020-04-15 22:25:26
+2020-04-15 22:25:26,504 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:25:26,504 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 44.4%
+2020-04-15 22:25:26,504 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 10.625%
+2020-04-15 22:25:26,504 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:25:26,533 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 433.625
+2020-04-15 22:25:26,533 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 431.81875
+2020-04-15 22:25:26,533 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 429.5
+2020-04-15 22:25:26,533 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:25:26,562 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:25:26,562 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2835
+2020-04-15 22:25:26,562 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2785
+2020-04-15 22:25:26,564 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:25:27,165 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:25:27,165 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 44.4%
+2020-04-15 22:25:27,166 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 10.625%
+2020-04-15 22:25:27,166 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:25:27,193 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 433.625
+2020-04-15 22:25:27,193 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 431.81875
+2020-04-15 22:25:27,193 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 429.5
+2020-04-15 22:25:27,193 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:25:27,221 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:25:27,221 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2835
+2020-04-15 22:25:27,221 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2785
+2020-04-15 22:25:27,223 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:25:30,752 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 10, now time: 2020-04-15 22:25:30
+2020-04-15 22:25:35,056 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 11, now time: 2020-04-15 22:25:35
+2020-04-15 22:25:39,361 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 12, now time: 2020-04-15 22:25:39
+2020-04-15 22:25:43,683 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 13, now time: 2020-04-15 22:25:43
+2020-04-15 22:25:48,009 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 14, now time: 2020-04-15 22:25:48
+2020-04-15 22:25:49,142 cpu_gpu_mem_monitor.py[line:214] INFO save data to file: monitor-result.csv success, now time = 2020-04-15 22:25:49
+2020-04-15 22:25:49,206 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:25:49,206 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 44.4%
+2020-04-15 22:25:49,206 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 9.6725%
+2020-04-15 22:25:49,207 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:25:49,239 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.8125
+2020-04-15 22:25:49,239 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 431.05833333333334
+2020-04-15 22:25:49,239 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 421.75
+2020-04-15 22:25:49,239 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:25:49,272 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:25:49,272 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2844
+2020-04-15 22:25:49,272 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2802
+2020-04-15 22:25:49,274 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:25:49,809 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:25:49,809 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 44.4%
+2020-04-15 22:25:49,809 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 9.6725%
+2020-04-15 22:25:49,809 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:25:49,841 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.8125
+2020-04-15 22:25:49,841 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 431.05833333333334
+2020-04-15 22:25:49,841 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 421.75
+2020-04-15 22:25:49,841 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:25:49,869 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:25:49,869 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2844
+2020-04-15 22:25:49,869 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2802
+2020-04-15 22:25:49,872 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:25:53,410 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 15, now time: 2020-04-15 22:25:53
+2020-04-15 22:25:57,716 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 16, now time: 2020-04-15 22:25:57
+2020-04-15 22:26:01,992 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 17, now time: 2020-04-15 22:26:01
+2020-04-15 22:26:06,304 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 18, now time: 2020-04-15 22:26:06
+2020-04-15 22:26:10,628 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 19, now time: 2020-04-15 22:26:10
+2020-04-15 22:26:11,729 cpu_gpu_mem_monitor.py[line:214] INFO save data to file: monitor-result.csv success, now time = 2020-04-15 22:26:11
+2020-04-15 22:26:11,791 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:26:11,791 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 99.0%
+2020-04-15 22:26:11,791 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 9.748750000000001%
+2020-04-15 22:26:11,791 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:26:11,819 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.8125
+2020-04-15 22:26:11,820 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 430.09375
+2020-04-15 22:26:11,820 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 420.75
+2020-04-15 22:26:11,820 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:26:11,853 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:26:11,854 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2851
+2020-04-15 22:26:11,854 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2811
+2020-04-15 22:26:11,856 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:26:12,400 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:26:12,400 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 99.0%
+2020-04-15 22:26:12,400 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 9.748750000000001%
+2020-04-15 22:26:12,400 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:26:12,427 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.8125
+2020-04-15 22:26:12,428 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 430.09375
+2020-04-15 22:26:12,428 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 420.75
+2020-04-15 22:26:12,428 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:26:12,456 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:26:12,456 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2851
+2020-04-15 22:26:12,456 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2811
+2020-04-15 22:26:12,458 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:26:15,984 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 20, now time: 2020-04-15 22:26:15
+2020-04-15 22:26:20,274 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 21, now time: 2020-04-15 22:26:20
+2020-04-15 22:26:24,548 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 22, now time: 2020-04-15 22:26:24
+2020-04-15 22:26:28,870 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 23, now time: 2020-04-15 22:26:28
+2020-04-15 22:26:33,135 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 24, now time: 2020-04-15 22:26:33
+2020-04-15 22:26:34,250 cpu_gpu_mem_monitor.py[line:214] INFO save data to file: monitor-result.csv success, now time = 2020-04-15 22:26:34
+2020-04-15 22:26:34,314 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:26:34,315 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 99.0%
+2020-04-15 22:26:34,315 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 11.1625%
+2020-04-15 22:26:34,315 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:26:34,351 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.8125
+2020-04-15 22:26:34,352 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 429.5375
+2020-04-15 22:26:34,352 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 418.875
+2020-04-15 22:26:34,352 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:26:34,391 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:26:34,391 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2908
+2020-04-15 22:26:34,391 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2826
+2020-04-15 22:26:34,394 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:26:34,929 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-15 22:26:34,929 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 99.0%
+2020-04-15 22:26:34,929 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 11.1625%
+2020-04-15 22:26:34,930 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-15 22:26:34,963 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 444.8125
+2020-04-15 22:26:34,964 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 429.5375
+2020-04-15 22:26:34,964 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 418.875
+2020-04-15 22:26:34,964 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-15 22:26:35,000 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 2752
+2020-04-15 22:26:35,000 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 2908
+2020-04-15 22:26:35,000 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 2826
+2020-04-15 22:26:35,004 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-15 22:26:38,524 cpu_gpu_mem_monitor.py[line:188] INFO sample nums: 25, now time: 2020-04-15 22:26:38
+2020-04-17 14:58:07,176 cpu_gpu_mem_monitor.py[line:273] INFO min cpu = 0.0%
+2020-04-17 14:58:07,177 cpu_gpu_mem_monitor.py[line:274] INFO max cpu = 100.0%
+2020-04-17 14:58:07,178 cpu_gpu_mem_monitor.py[line:275] INFO total mean cpu = 6.6062904002568485%
+2020-04-17 14:58:07,183 cpu_gpu_mem_monitor.py[line:282] INFO finished draw cpu image
+2020-04-17 14:58:07,414 cpu_gpu_mem_monitor.py[line:324] INFO max gpu = 5230.0
+2020-04-17 14:58:07,414 cpu_gpu_mem_monitor.py[line:325] INFO avg gpu = 630.3882705479452
+2020-04-17 14:58:07,414 cpu_gpu_mem_monitor.py[line:326] INFO min gpu = 0.0
+2020-04-17 14:58:07,414 cpu_gpu_mem_monitor.py[line:327] INFO finished draw gpu image
+2020-04-17 14:58:07,478 cpu_gpu_mem_monitor.py[line:355] INFO min memory = 15942
+2020-04-17 14:58:07,478 cpu_gpu_mem_monitor.py[line:356] INFO max memory = 314904
+2020-04-17 14:58:07,478 cpu_gpu_mem_monitor.py[line:357] INFO avg memory = 88338
+2020-04-17 14:58:07,481 cpu_gpu_mem_monitor.py[line:372] INFO finished draw memory image
+2020-04-17 15:02:37,834 cpu_gpu_mem_monitor.py[line:275] INFO min cpu = 0.0%
+2020-04-17 15:02:37,835 cpu_gpu_mem_monitor.py[line:276] INFO max cpu = 100.0%
+2020-04-17 15:02:37,836 cpu_gpu_mem_monitor.py[line:277] INFO total mean cpu = 6.6062904002568485%
+2020-04-17 15:02:37,839 cpu_gpu_mem_monitor.py[line:284] INFO finished draw cpu image
+2020-04-17 15:02:38,073 cpu_gpu_mem_monitor.py[line:329] INFO max gpu = 5230.0
+2020-04-17 15:02:38,073 cpu_gpu_mem_monitor.py[line:330] INFO avg gpu = 630.3882705479452
+2020-04-17 15:02:38,073 cpu_gpu_mem_monitor.py[line:331] INFO min gpu = 0.0
+2020-04-17 15:02:38,073 cpu_gpu_mem_monitor.py[line:332] INFO finished draw gpu image
+2020-04-17 15:02:38,137 cpu_gpu_mem_monitor.py[line:361] INFO min memory = 15942
+2020-04-17 15:02:38,137 cpu_gpu_mem_monitor.py[line:362] INFO max memory = 314904
+2020-04-17 15:02:38,137 cpu_gpu_mem_monitor.py[line:363] INFO avg memory = 88338
+2020-04-17 15:02:38,139 cpu_gpu_mem_monitor.py[line:378] INFO finished draw memory image
+2020-04-17 15:03:07,993 cpu_gpu_mem_monitor.py[line:275] INFO min cpu = 0.0%
+2020-04-17 15:03:07,994 cpu_gpu_mem_monitor.py[line:276] INFO max cpu = 100.0%
+2020-04-17 15:03:07,995 cpu_gpu_mem_monitor.py[line:277] INFO total mean cpu = 6.6062904002568485%
+2020-04-17 15:03:08,001 cpu_gpu_mem_monitor.py[line:284] INFO finished draw cpu image
+2020-04-17 15:03:08,248 cpu_gpu_mem_monitor.py[line:329] INFO max gpu = 5230.0
+2020-04-17 15:03:08,248 cpu_gpu_mem_monitor.py[line:330] INFO avg gpu = 630.3882705479452
+2020-04-17 15:03:08,248 cpu_gpu_mem_monitor.py[line:331] INFO min gpu = 0.0
+2020-04-17 15:03:08,248 cpu_gpu_mem_monitor.py[line:332] INFO finished draw gpu image
+2020-04-17 15:03:08,313 cpu_gpu_mem_monitor.py[line:361] INFO min memory = 15942
+2020-04-17 15:03:08,313 cpu_gpu_mem_monitor.py[line:362] INFO max memory = 314904
+2020-04-17 15:03:08,313 cpu_gpu_mem_monitor.py[line:363] INFO avg memory = 88338
+2020-04-17 15:03:08,315 cpu_gpu_mem_monitor.py[line:378] INFO finished draw memory image
+2020-04-17 15:03:23,756 cpu_gpu_mem_monitor.py[line:275] INFO min cpu = 0.0%
+2020-04-17 15:03:23,757 cpu_gpu_mem_monitor.py[line:276] INFO max cpu = 100.0%
+2020-04-17 15:03:23,757 cpu_gpu_mem_monitor.py[line:277] INFO total mean cpu = 6.6062904002568485%
+2020-04-17 15:03:23,764 cpu_gpu_mem_monitor.py[line:284] INFO finished draw cpu image
+2020-04-17 15:03:24,019 cpu_gpu_mem_monitor.py[line:329] INFO max gpu = 5230.0
+2020-04-17 15:03:24,019 cpu_gpu_mem_monitor.py[line:330] INFO avg gpu = 630.3882705479452
+2020-04-17 15:03:24,020 cpu_gpu_mem_monitor.py[line:331] INFO min gpu = 0.0
+2020-04-17 15:03:24,020 cpu_gpu_mem_monitor.py[line:332] INFO finished draw gpu image
+2020-04-17 15:03:24,086 cpu_gpu_mem_monitor.py[line:361] INFO min memory = 15942
+2020-04-17 15:03:24,086 cpu_gpu_mem_monitor.py[line:362] INFO max memory = 314904
+2020-04-17 15:03:24,086 cpu_gpu_mem_monitor.py[line:363] INFO avg memory = 88338
+2020-04-17 15:03:24,089 cpu_gpu_mem_monitor.py[line:378] INFO finished draw memory image
+2020-04-17 15:03:47,921 cpu_gpu_mem_monitor.py[line:275] INFO min cpu = 0.0%
+2020-04-17 15:03:47,922 cpu_gpu_mem_monitor.py[line:276] INFO max cpu = 100.0%
+2020-04-17 15:03:47,922 cpu_gpu_mem_monitor.py[line:277] INFO total mean cpu = 6.6062904002568485%
+2020-04-17 15:03:47,929 cpu_gpu_mem_monitor.py[line:284] INFO finished draw cpu image
+2020-04-17 15:03:48,164 cpu_gpu_mem_monitor.py[line:329] INFO max gpu = 5230.0
+2020-04-17 15:03:48,164 cpu_gpu_mem_monitor.py[line:330] INFO avg gpu = 630.3882705479452
+2020-04-17 15:03:48,164 cpu_gpu_mem_monitor.py[line:331] INFO min gpu = 0.0
+2020-04-17 15:03:48,164 cpu_gpu_mem_monitor.py[line:332] INFO finished draw gpu image
+2020-04-17 15:03:48,231 cpu_gpu_mem_monitor.py[line:361] INFO min memory = 15942
+2020-04-17 15:03:48,231 cpu_gpu_mem_monitor.py[line:362] INFO max memory = 314904
+2020-04-17 15:03:48,232 cpu_gpu_mem_monitor.py[line:363] INFO avg memory = 88338
+2020-04-17 15:03:48,234 cpu_gpu_mem_monitor.py[line:378] INFO finished draw memory image
+2020-04-17 15:06:39,687 cpu_gpu_mem_monitor.py[line:275] INFO min cpu = 0.0%
+2020-04-17 15:06:39,688 cpu_gpu_mem_monitor.py[line:276] INFO max cpu = 100.0%
+2020-04-17 15:06:39,688 cpu_gpu_mem_monitor.py[line:277] INFO total mean cpu = 6.6062904002568485%
+2020-04-17 15:06:39,694 cpu_gpu_mem_monitor.py[line:284] INFO finished draw cpu image
+2020-04-17 15:06:39,949 cpu_gpu_mem_monitor.py[line:329] INFO max gpu = 5230.0
+2020-04-17 15:06:39,949 cpu_gpu_mem_monitor.py[line:330] INFO avg gpu = 630.3882705479452
+2020-04-17 15:06:39,949 cpu_gpu_mem_monitor.py[line:331] INFO min gpu = 0.0
+2020-04-17 15:06:39,949 cpu_gpu_mem_monitor.py[line:332] INFO finished draw gpu image
+2020-04-17 15:06:40,016 cpu_gpu_mem_monitor.py[line:361] INFO min memory = 15942
+2020-04-17 15:06:40,016 cpu_gpu_mem_monitor.py[line:362] INFO max memory = 314904
+2020-04-17 15:06:40,019 cpu_gpu_mem_monitor.py[line:363] INFO avg memory = 88338
+2020-04-17 15:06:40,022 cpu_gpu_mem_monitor.py[line:378] INFO finished draw memory image

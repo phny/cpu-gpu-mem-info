@@ -1,5 +1,6 @@
 import json
 import argparse
+import numpy as np
 import matplotlib.pyplot as plt
 from scipy import signal
 import os
@@ -30,7 +31,7 @@ class CpuGpuMemoryInfo(object):
         self.duration = 0
 
         # 采样间隔, 默认设置为5秒
-        self.interval = 3
+        self.interval = 2.35
 
         # data dict, 记录cpu,gpu,memory数据
         self.data_dict = {}
@@ -73,9 +74,10 @@ class CpuGpuMemoryInfo(object):
         # 读取配置文件到字典
         with open("./config.json", "r") as f:
             self.config_dict = json.load(f)
-        
+
         # logger
-        self.logger = Logger("./monitor-log/monitor.log").get_logger("monitor-logger")
+        self.logger = Logger(
+            "./monitor-log/monitor.log").get_logger("monitor-logger")
 
     def monitor(self, args):
         """
@@ -173,7 +175,7 @@ class CpuGpuMemoryInfo(object):
                     self.draw(os.path.join(self.save_dir,
                                            'monitor-result.csv'), fitting=False)
                     self.logger.info("PID = {} not found, finished monitor now， total run time: {} s".
-                          format(self.pid, time.time() - self.start_timestamp))
+                                     format(self.pid, time.time() - self.start_timestamp))
                     self.logger.info("***finished monitor***")
                     exit(1)
                 # 进程未退出，画图保存, 继续监控
@@ -185,7 +187,7 @@ class CpuGpuMemoryInfo(object):
             # 暂停 interval 秒
             plt.pause(self.interval)
             self.logger.info("sample nums: {}, now time: {}".format(self.sample_nums,
-                                                         time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+                                                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
     def data_fitting(self, x_list, y_list):
         """
@@ -211,7 +213,7 @@ class CpuGpuMemoryInfo(object):
         pd.DataFrame.from_dict(dict, orient='index').T.to_csv(
             os.path.join(save_dir, file_name), index=False)
         self.logger.info("save data to file: {} success, now time = {}".format(file_name,
-                                                                    time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
+                                                                               time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())))
 
     def load_data(self, data_path):
         """
@@ -248,6 +250,7 @@ class CpuGpuMemoryInfo(object):
 
         for i in range(cpu_count):
             x_list = ast.literal_eval(data_dict["cpu-" + str(i)][0])
+            # for debug
             # x_list = [item * self.interval for item in x_list]
 
             y_list = ast.literal_eval(data_dict["cpu-" + str(i)][1])
@@ -308,19 +311,25 @@ class CpuGpuMemoryInfo(object):
 
         for i in range(gpu_count):
             x_list = ast.literal_eval(data_dict["gpu-" + str(i)][0])
+            # for debug
+            # x_list = [item * self.interval for item in x_list]
             y_list = ast.literal_eval(data_dict["gpu-" + str(i)][1])
 
             # gpu数据拟合
             # x_list_new, y_list_new = self.data_fitting(x_list, y_list)
+
             # 记录gpu的最大最小以及平均值
             mean_gpu += np.mean(y_list)
             if (max(y_list) > max_gpu):
                 max_gpu = max(y_list)
             if (min(y_list) < min_gpu):
                 min_gpu = min(y_list)
+            # 稍作偏移， 避免曲线重叠看不清
+            y_list = np.array(y_list) - max(y_list)*0.03*i
             # 画gpu图像
             self.gpu_subplot.plot(x_list, y_list, label='gpu-' + str(i))
             # self.gpu_subplot.plot(x_list_new, y_list_new, label='gpu-' + str(i))
+
         self.logger.info("max gpu = {}".format(max_gpu))
         self.logger.info("avg gpu = {}".format(mean_gpu / gpu_count))
         self.logger.info("min gpu = {}".format(min_gpu))
@@ -333,7 +342,7 @@ class CpuGpuMemoryInfo(object):
             self.total_gpu_mem_size = d["gpu"]["max_gpu_size"]
         if self.mode == "manual":
             self.total_gpu_mem_size = self.config_dict["gpu"]["max_gpu_size"]
-        self.gpu_subplot.set_ylim(0, self.total_gpu_mem_size)
+        self.gpu_subplot.set_ylim((-200, self.total_gpu_mem_size))
         # 设置图例位置,loc可以为[upper, lower, left, right, center]
         self.gpu_subplot.legend(loc='right', shadow=True)
 
@@ -349,6 +358,7 @@ class CpuGpuMemoryInfo(object):
         self.mem_subplot.grid()
         data_dict = self.load_data(data_path)
         x_list = ast.literal_eval(data_dict["mem"][0])
+        # for debug
         # x_list = [item * self.interval for item in x_list]
         y_list = ast.literal_eval(data_dict["mem"][1])
 

@@ -4,9 +4,9 @@
   },
   "gpu": {
     "gpu_nums": 8,
-    "max_gpu_size": 15079
+    "max_gpu_size": 12288
   },
   "memory": {
-    "max_mem_size": 257024
+    "max_mem_size": 524288
   }
 }
