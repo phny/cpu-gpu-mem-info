@@ -31,7 +31,7 @@ class CpuGpuMemoryInfo(object):
         self.duration = 0
 
         # 采样间隔, 默认设置为5秒
-        self.interval = 2.35
+        self.interval = 2
 
         # data dict, 记录cpu,gpu,memory数据
         self.data_dict = {}
